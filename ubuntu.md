@@ -120,3 +120,96 @@ WSL-spezifisch:
 	•	wsl --set-version Ubuntu 2 stellt Ubuntu auf WSL2 um.
 	•	wsl --set-default-version 2 macht WSL2 zum Standard für neue Distros.
 
+
+
+Wenn du Docker installierst und dann z. B. nginx laufen lässt, kannst du die NGINX-Startseite über deinen Browser aufrufen (z. B. http://localhost:8080). Unten findest du alle nötigen Schritte – inklusive wie du die HTML-Datei bearbeitest mit vim oder vi.
+
+⸻
+
+Schritt-für-Schritt: NGINX im Docker starten
+
+Zuerst sicherstellen, dass Docker läuft.
+
+Dann NGINX im Container starten mit:
+
+docker run –name mein-nginx -p 8080:80 -d nginx
+
+Erklärung:
+	•	--name mein-nginx gibt dem Container einen Namen
+	•	-p 8080:80 leitet Port 8080 auf Port 80 im Container weiter
+	•	-d startet ihn im Hintergrund
+	•	nginx ist das Image, das verwendet wird
+
+Jetzt kannst du im Browser aufrufen:
+
+http://localhost:8080
+
+Du siehst dann die Standardstartseite von NGINX.
+
+⸻
+
+In die Container-Konsole wechseln
+
+docker exec -it mein-nginx bash
+
+Jetzt bist du im Container. Standardmäßig liegt die HTML-Datei hier:
+
+cd /usr/share/nginx/html
+
+Mit ls kannst du die Dateien dort sehen.
+
+Die Datei heißt meist index.html.
+
+⸻
+
+HTML-Datei bearbeiten mit vim oder vi
+
+vi index.html
+
+oder
+
+vim index.html
+
+Wenn vim nicht installiert ist, kannst du es mit folgendem Befehl im Container nachinstallieren:
+
+apt update && apt install vim
+
+Dann wieder vim index.html eingeben.
+
+⸻
+
+vim/vi Steuerung (Kurz-Anleitung)
+	•	Mit Pfeiltasten bewegen
+	•	Zum Bearbeiten:
+Taste i drücken (Insert-Modus)
+	•	Jetzt kannst du schreiben oder ändern
+	•	Speichern und beenden:
+Taste ESC, dann :wq eingeben (write + quit), dann Enter drücken
+	•	Nur beenden ohne Speichern:
+ESC, dann :q!
+
+⸻
+
+NGINX neu starten (im Container)
+
+Wenn du Änderungen gemacht hast, kannst du NGINX im Container neu laden mit:
+
+nginx -s reload
+
+Oder:
+
+service nginx reload
+
+Falls das nicht funktioniert, Container neu starten:
+
+exit
+
+dann auf dem Host:
+
+docker restart mein-nginx
+
+⸻
+
+Jetzt zeigt dir http://localhost:8080 deine eigene HTML-Seite an.
+
+Wenn du willst, kann ich dir auch zeigen, wie man ein Volume verwendet, damit du die HTML-Datei außerhalb des Containers auf deinem PC speicherst und direkt bearbeiten kannst – ganz ohne in den Container zu gehen. Sag einfach Bescheid!
